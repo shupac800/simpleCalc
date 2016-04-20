@@ -20,9 +20,11 @@ namespace simpleCalc
 
             while(runState)
             {
-                string prompt = "[" + lineNum++.ToString() + "]> ";
-                Console.Write(prompt);
+                Console.Write("[" + lineNum++.ToString() + "]> ");  // display the prompt, increment lineNum
                 string inp = Console.ReadLine();
+
+                // convert to lowercase
+                inp = inp.ToLower();
 
                 // strip out spaces
                 inp = Regex.Replace(inp," ","");
@@ -48,12 +50,13 @@ namespace simpleCalc
                 last_inp = inp;
 
                 // are we defining a constant?
-                if (inp.IndexOf("=") > -1 )
+                if (inp.IndexOf('=') > -1 )
                 {
-                    double n = 0;
                     string[] defConstant = inp.Split('=');
-                    //Console.WriteLine("left side is {0}, right side is {1}",defConstant[0],defConstant[1]);
-                    // determine which side of the equality is a number
+                    //Console.WriteLine("Left side is {0}, right side is {1}",defConstant[0],defConstant[1]);
+
+                    // determine whether the left and right sides of the equality are numbers or constants
+                    double n = 0;
                     bool rightSideIsNumeric = double.TryParse(defConstant[1], out n);
                     bool leftSideIsNumeric = double.TryParse(defConstant[0], out n);
                     if (leftSideIsNumeric && Regex.IsMatch(defConstant[1], @"^[a-z]+$"))
@@ -66,7 +69,7 @@ namespace simpleCalc
                         else
                         {
                             constants.Add(defConstant[1], float.Parse(defConstant[0]));
-                            Console.WriteLine("defined {0} as {1}\n", defConstant[1], constants[defConstant[1]]);
+                            Console.WriteLine("Defined {0} as {1}\n", defConstant[1], constants[defConstant[1]]);
                             continue;
                         }
                     }
@@ -80,13 +83,13 @@ namespace simpleCalc
                         else
                         {
                             constants.Add(defConstant[0], float.Parse(defConstant[1]));
-                            Console.WriteLine("defined {0} as {1}\n", defConstant[0], constants[defConstant[0]]);
+                            Console.WriteLine("Defined {0} as {1}\n", defConstant[0], constants[defConstant[0]]);
                             continue;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Couldn't parse input\n");
+                        Console.WriteLine("Error: couldn't parse equality\n");
                         continue;
                     }
                 }
@@ -99,11 +102,11 @@ namespace simpleCalc
                         double leftOperand = 0, rightOperand = 0;
 
                         // check to see if we're using a constant
-                        if (Regex.IsMatch(operands[0], @"^[a-z]+$"))
+                        if (Regex.IsMatch(operands[0], @"^[a-z]+$"))  // left side contains a constant?
                         {
-                            if (constants.ContainsKey(operands[0]))
+                            if (constants.ContainsKey(operands[0]))  // has this constant been defined?
                             {
-                                leftOperand = constants[operands[0]];
+                                leftOperand = constants[operands[0]];  // if so, assign value from dictionary
                             }
                             else
                             {
@@ -111,12 +114,11 @@ namespace simpleCalc
                                 continue;
                             }
                         }
-                        if (Regex.IsMatch(operands[1], @"^[a-z]+$"))
+                        if (Regex.IsMatch(operands[1], @"^[a-z]+$"))  // right side contains a constant?
                         {
-                            if (constants.ContainsKey(operands[1]))
+                            if (constants.ContainsKey(operands[1]))  // has this constant been defined?
                             {
-                                //leftOperand = float.Parse(operands[0]);
-                                rightOperand = constants[operands[1]];
+                                rightOperand = constants[operands[1]];  // if so, assign value from dictionary
                             }
                             else
                             {
@@ -125,11 +127,11 @@ namespace simpleCalc
                             }
                         }
                         // regex expression from http://stackoverflow.com/questions/12117024/decimal-number-regular-expression-where-digit-after-decimal-is-optional
-                        if (Regex.IsMatch(operands[0], @"^-?\d*\.?\d*$"))
+                        if (Regex.IsMatch(operands[0], @"^-?\d*\.?\d*$"))  // left side is numeric?
                         {
                             leftOperand = float.Parse(operands[0]);
                         }
-                        if (Regex.IsMatch(operands[1], @"^-?\d*\.?\d*$"))
+                        if (Regex.IsMatch(operands[1], @"^-?\d*\.?\d*$"))  // right side is numeric?
                         {
                             rightOperand = float.Parse(operands[1]);
                         }
