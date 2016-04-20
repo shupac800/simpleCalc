@@ -8,7 +8,7 @@ namespace simpleCalc
 {
     public class Add
     {
-        public static double Addition(double op1, double op2)
+        public static decimal Addition(decimal op1, decimal op2)
         {
             return op1 + op2;
         }

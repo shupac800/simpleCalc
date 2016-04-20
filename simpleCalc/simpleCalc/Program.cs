@@ -13,12 +13,12 @@ namespace simpleCalc
         {
             string[] operations = new string[] { "+", "-", "*", "/", "%" };
             int lineNum = 0;
-            double result = 0;  // have to initialize double to a number
+            decimal result = 0;  // have to initialize double to a number
             bool runState = true;
             string last_inp = null;
-            Dictionary<string, double> constants = new Dictionary<string, double>();
+            Dictionary<string, decimal> constants = new Dictionary<string, decimal>();
 
-            while(runState)
+            while (runState)
             {
                 Console.Write("[" + lineNum++.ToString() + "]> ");  // display the prompt, increment lineNum
                 string inp = Console.ReadLine();
@@ -27,7 +27,7 @@ namespace simpleCalc
                 inp = inp.ToLower();
 
                 // strip out spaces
-                inp = Regex.Replace(inp," ","");
+                inp = Regex.Replace(inp, " ", "");
 
                 // was a command entered?
                 switch (inp)
@@ -39,15 +39,29 @@ namespace simpleCalc
                         runState = false;
                         continue;
                     case "last":
-                        Console.WriteLine("   = " + result);
+                        Console.WriteLine("   = " + result + "\n");
                         continue;
                     case "lastq":
-                        Console.WriteLine(last_inp);
+                        Console.WriteLine(last_inp + "\n");
                         continue;
                     default:
                         break;
                 }
                 last_inp = inp;
+
+                // are we referencing a constant only (i.e. to get its value)?
+                if (Regex.IsMatch(inp, @"^[a-z]+$"))
+                {
+                    if (constants.ContainsKey(inp))  // has this constant been defined?
+                    {
+                        Console.WriteLine("   = " + constants[inp]);  // if so, display value of this constant
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: {0} is not a defined constant\n", inp);
+                    }
+                    continue;
+                }
 
                 // are we defining a constant?
                 if (inp.IndexOf('=') > -1 )
@@ -56,9 +70,9 @@ namespace simpleCalc
                     //Console.WriteLine("Left side is {0}, right side is {1}",defConstant[0],defConstant[1]);
 
                     // determine whether the left and right sides of the equality are numbers or constants
-                    double n = 0;
-                    bool rightSideIsNumeric = double.TryParse(defConstant[1], out n);
-                    bool leftSideIsNumeric = double.TryParse(defConstant[0], out n);
+                    decimal n = 0;
+                    bool rightSideIsNumeric = decimal.TryParse(defConstant[1], out n);
+                    bool leftSideIsNumeric = decimal.TryParse(defConstant[0], out n);
                     if (leftSideIsNumeric && Regex.IsMatch(defConstant[1], @"^[a-z]+$"))
                     {
                         if (constants.ContainsKey(defConstant[1]))
@@ -68,7 +82,7 @@ namespace simpleCalc
                         }
                         else
                         {
-                            constants.Add(defConstant[1], float.Parse(defConstant[0]));
+                            constants.Add(defConstant[1], decimal.Parse(defConstant[0]));
                             Console.WriteLine("Defined {0} as {1}\n", defConstant[1], constants[defConstant[1]]);
                             continue;
                         }
@@ -82,7 +96,7 @@ namespace simpleCalc
                         }
                         else
                         {
-                            constants.Add(defConstant[0], float.Parse(defConstant[1]));
+                            constants.Add(defConstant[0], decimal.Parse(defConstant[1]));
                             Console.WriteLine("Defined {0} as {1}\n", defConstant[0], constants[defConstant[0]]);
                             continue;
                         }
@@ -99,7 +113,7 @@ namespace simpleCalc
                     if (inp.IndexOf(operations[i]) > -1)  // check to see if the input string contains this operator
                     {
                         string[] operands = inp.Split(operations[i][0]);   // first character of operations[i] is its only character
-                        double leftOperand = 0, rightOperand = 0;
+                        decimal leftOperand = 0, rightOperand = 0;
 
                         // check to see if we're using a constant
                         if (Regex.IsMatch(operands[0], @"^[a-z]+$"))  // left side contains a constant?
@@ -129,11 +143,11 @@ namespace simpleCalc
                         // regex expression from http://stackoverflow.com/questions/12117024/decimal-number-regular-expression-where-digit-after-decimal-is-optional
                         if (Regex.IsMatch(operands[0], @"^-?\d*\.?\d*$"))  // left side is numeric?
                         {
-                            leftOperand = float.Parse(operands[0]);
+                            leftOperand = decimal.Parse(operands[0]);
                         }
                         if (Regex.IsMatch(operands[1], @"^-?\d*\.?\d*$"))  // right side is numeric?
                         {
-                            rightOperand = float.Parse(operands[1]);
+                            rightOperand = decimal.Parse(operands[1]);
                         }
 
                         switch (operations[i])
@@ -153,7 +167,7 @@ namespace simpleCalc
                             case "%":
                                 result = Mod.Modulus(leftOperand, rightOperand);
                                 break;
-                            default:
+                            default:  // this should never trigger
                                 break;
                         }
                         Console.WriteLine("   = " + result + "\n");

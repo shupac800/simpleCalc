@@ -8,7 +8,7 @@ namespace simpleCalc
 {
     public class Mul
     {
-        public static double Multiplication(double op1, double op2)
+        public static decimal Multiplication(decimal op1, decimal op2)
         {
             return op1 * op2;
         }

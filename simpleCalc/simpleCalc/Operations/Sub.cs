@@ -8,7 +8,7 @@ namespace simpleCalc
 {
     public class Sub
     {
-        public static double Subtraction(double op1, double op2)
+        public static decimal Subtraction(decimal op1, decimal op2)
         {
             return op1 - op2;
         }

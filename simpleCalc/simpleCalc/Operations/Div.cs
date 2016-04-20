@@ -8,7 +8,7 @@ namespace simpleCalc
 {
     public class Div
     {
-        public static double Division(double op1, double op2)
+        public static decimal Division(decimal op1, decimal op2)
         {
             return op1 / op2;
         }

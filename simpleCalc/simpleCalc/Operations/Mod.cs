@@ -8,7 +8,7 @@ namespace simpleCalc
 {
     public class Mod
     {
-        public static double Modulus(double op1, double op2)
+        public static decimal Modulus(decimal op1, decimal op2)
         {
             return op1 % op2;
         }
