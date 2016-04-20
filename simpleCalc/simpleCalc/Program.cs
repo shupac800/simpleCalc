@@ -61,6 +61,7 @@ namespace simpleCalc
                         if (constants.ContainsKey(defConstant[1]))
                         {
                             Console.WriteLine("Error: constant {0} has already been defined\n", defConstant[1]);
+                            continue;
                         }
                         else
                         {
@@ -74,6 +75,7 @@ namespace simpleCalc
                         if (constants.ContainsKey(defConstant[0]))
                         {
                             Console.WriteLine("Error: constant {0} has already been defined\n", defConstant[0]);
+                            continue;
                         }
                         else
                         {
@@ -97,7 +99,7 @@ namespace simpleCalc
                         double leftOperand = 0, rightOperand = 0;
 
                         // check to see if we're using a constant
-                        if (Regex.IsMatch(operands[0], "[a-z]"))
+                        if (Regex.IsMatch(operands[0], @"^[a-z]+$"))
                         {
                             if (constants.ContainsKey(operands[0]))
                             {
@@ -109,7 +111,7 @@ namespace simpleCalc
                                 continue;
                             }
                         }
-                        if (Regex.IsMatch(operands[1], "[a-z]"))
+                        if (Regex.IsMatch(operands[1], @"^[a-z]+$"))
                         {
                             if (constants.ContainsKey(operands[1]))
                             {
@@ -123,11 +125,11 @@ namespace simpleCalc
                             }
                         }
                         // regex expression from http://stackoverflow.com/questions/12117024/decimal-number-regular-expression-where-digit-after-decimal-is-optional
-                        if (Regex.IsMatch(operands[0], @"/^\d*\.?\d*$/"))
+                        if (Regex.IsMatch(operands[0], @"^-?\d*\.?\d*$"))
                         {
                             leftOperand = float.Parse(operands[0]);
                         }
-                        if (Regex.IsMatch(operands[1], @"/^\d*\.?\d*$/"))
+                        if (Regex.IsMatch(operands[1], @"^-?\d*\.?\d*$"))
                         {
                             rightOperand = float.Parse(operands[1]);
                         }
