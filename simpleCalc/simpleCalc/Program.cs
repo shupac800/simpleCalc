@@ -22,7 +22,6 @@ namespace simpleCalc
             {
                 Console.Write("[" + lineNum++.ToString() + "]> ");  // display the prompt, increment lineNum
                 string inp = formatInp(Console.ReadLine());
-                cmdList.Add(inp);  // add input to command history
 
                 // was a command entered?
                 switch (inp)
@@ -54,6 +53,7 @@ namespace simpleCalc
                     default:
                         break;
                 }
+                cmdList.Add(inp);  // add non-command input to input history
 
                 // are we referencing a constant only (i.e. to get its value)?
                 if (Regex.IsMatch(inp, @"^[a-z]+$"))
