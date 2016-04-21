@@ -39,7 +39,7 @@ namespace simpleCalc
                         Console.WriteLine("   = " + result + "\n");
                         continue;
                     case "lastq":
-                        Console.WriteLine(last_inp + "\n");
+                        Console.WriteLine(cmdList.Last() + "\n");
                         continue;
                     case "all":
                         // print out list of commands
@@ -54,7 +54,7 @@ namespace simpleCalc
                     default:
                         break;
                 }
-                last_inp = inp;
+                //last_inp = inp;
                 cmdList.Add(inp);
 
                 // are we referencing a constant only (i.e. to get its value)?
