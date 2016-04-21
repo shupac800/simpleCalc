@@ -15,7 +15,6 @@ namespace simpleCalc
             int lineNum = 0;
             decimal result = 0;  // have to initialize decimal to a number
             bool runState = true;
-            string last_inp = null;
             Dictionary<string, decimal> constants = new Dictionary<string, decimal>();
             List<string> cmdList = new List<string>();
 
@@ -23,6 +22,7 @@ namespace simpleCalc
             {
                 Console.Write("[" + lineNum++.ToString() + "]> ");  // display the prompt, increment lineNum
                 string inp = formatInp(Console.ReadLine());
+                cmdList.Add(inp);  // add input to command history
 
                 // was a command entered?
                 switch (inp)
@@ -49,13 +49,11 @@ namespace simpleCalc
                         }
                         Console.Write("Your choice: ");
                         string choice = Console.ReadLine();
-                        inp = formatInp(cmdList[Int32.Parse(choice)]);
+                        inp = formatInp(cmdList[Int32.Parse(choice)]);  // should have some error handling here
                         break;
                     default:
                         break;
                 }
-                //last_inp = inp;
-                cmdList.Add(inp);
 
                 // are we referencing a constant only (i.e. to get its value)?
                 if (Regex.IsMatch(inp, @"^[a-z]+$"))
@@ -195,5 +193,6 @@ namespace simpleCalc
 
             return inp;
         }
+
     }
 }
