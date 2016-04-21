@@ -13,29 +13,26 @@ namespace simpleCalc
         {
             string[] operations = new string[] { "+", "-", "*", "/", "%" };
             int lineNum = 0;
-            decimal result = 0;  // have to initialize double to a number
+            decimal result = 0;  // have to initialize decimal to a number
             bool runState = true;
             string last_inp = null;
             Dictionary<string, decimal> constants = new Dictionary<string, decimal>();
+            List<string> cmdList = new List<string>();
 
             while (runState)
             {
                 Console.Write("[" + lineNum++.ToString() + "]> ");  // display the prompt, increment lineNum
-                string inp = Console.ReadLine();
-
-                // convert to lowercase
-                inp = inp.ToLower();
-
-                // strip out spaces
-                inp = Regex.Replace(inp, " ", "");
+                string inp = formatInp(Console.ReadLine());
 
                 // was a command entered?
                 switch (inp)
                 {
                     case "quit":
+                        Console.WriteLine("Bye!!");
                         runState = false;
                         continue;
                     case "exit":
+                        Console.WriteLine("Bye!!");
                         runState = false;
                         continue;
                     case "last":
@@ -44,17 +41,28 @@ namespace simpleCalc
                     case "lastq":
                         Console.WriteLine(last_inp + "\n");
                         continue;
+                    case "all":
+                        // print out list of commands
+                        for (int i = 0; i < cmdList.Count; i++)
+                        {
+                            Console.WriteLine("{0}. {1}", i, cmdList[i]);
+                        }
+                        Console.Write("Your choice: ");
+                        string choice = Console.ReadLine();
+                        inp = formatInp(cmdList[Int32.Parse(choice)]);
+                        break;
                     default:
                         break;
                 }
                 last_inp = inp;
+                cmdList.Add(inp);
 
                 // are we referencing a constant only (i.e. to get its value)?
                 if (Regex.IsMatch(inp, @"^[a-z]+$"))
                 {
                     if (constants.ContainsKey(inp))  // has this constant been defined?
                     {
-                        Console.WriteLine("   = " + constants[inp]);  // if so, display value of this constant
+                        Console.WriteLine("   = " + constants[inp] + "\n");  // if so, display value of this constant
                     }
                     else
                     {
@@ -140,7 +148,7 @@ namespace simpleCalc
                                 continue;
                             }
                         }
-                        // regex expression from http://stackoverflow.com/questions/12117024/decimal-number-regular-expression-where-digit-after-decimal-is-optional
+
                         if (Regex.IsMatch(operands[0], @"^-?\d*\.?\d*$"))  // left side is numeric?
                         {
                             leftOperand = decimal.Parse(operands[0]);
@@ -167,7 +175,7 @@ namespace simpleCalc
                             case "%":
                                 result = Mod.Modulus(leftOperand, rightOperand);
                                 break;
-                            default:  // this should never trigger
+                            default:                 // this should never trigger
                                 break;
                         }
                         Console.WriteLine("   = " + result + "\n");
@@ -175,6 +183,17 @@ namespace simpleCalc
                     }
                 }
             }
+        }
+
+        static string formatInp(string inp)
+        {
+            // convert to lowercase
+            inp = inp.ToLower();
+
+            // strip out spaces
+            inp = Regex.Replace(inp, " ", "");
+
+            return inp;
         }
     }
 }
