@@ -10,7 +10,7 @@ namespace simpleCalcTests
         [TestMethod]
         public void testAddition()
         {
-            decimal op1 = 2.1m;
+            decimal op1 = 2.1m;  // "m" suffix required to fit double 2.1 into decimal op1
             decimal op2 = 4.4m;
             Assert.AreEqual(op1 + op2, Add.Addition(op1,op2));
         }
@@ -42,6 +42,11 @@ namespace simpleCalcTests
             decimal op1 = 121;
             decimal op2 = 100;
             Assert.AreEqual(op1 % op2, Mod.Modulus(op1, op2));
+        }
+        [TestMethod]
+        public void testFormatInp()
+        {
+            Assert.AreEqual("a=1234",Program.formatInp("A  = 1234 "));
         }
     }
 }

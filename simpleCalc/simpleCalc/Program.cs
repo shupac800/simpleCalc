@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace simpleCalc
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -183,7 +183,7 @@ namespace simpleCalc
             }
         }
 
-        static string formatInp(string inp)
+        public static string formatInp(string inp)
         {
             // convert to lowercase
             inp = inp.ToLower();
